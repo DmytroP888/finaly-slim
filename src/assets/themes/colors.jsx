@@ -1,0 +1,17 @@
+// const accent = '#FFBC33'
+// export const MAIN_LIGHT = accent
+
+export const COLOR_1  = '#E0E0E0'
+export const COLOR_2  = '#9B9FAA'
+export const COLOR_3  = '#212121'
+export const COLOR_4  = '#FFFFFF'
+export const COLOR_5  = '#FC842D'
+export const COLOR_6  = '#F0F1F3'
+export const COLOR_7  = '#264061'
+export const COLOR_8  = '#000000'
+export const COLOR_9  = '#EFF1F3'
+export const COLOR_10  = '#2121211F'
+export const COLOR_11  = 'linear-gradient(180deg, rgba(255, 255, 255, 0.5) 0%, #FFFFFF 42.19%)'
+export const COLOR_12  = '#9B9FAA'
+export const COLOR_13  = '#FFFFFF'
+export const COLOR_14  = '#212121'
