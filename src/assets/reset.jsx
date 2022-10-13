@@ -117,4 +117,6 @@ export default createGlobalStyle`
     :where([draggable="true"]) {
         -webkit-user-drag: element;
     }
+}
+
 `
