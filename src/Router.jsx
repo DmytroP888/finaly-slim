@@ -27,7 +27,7 @@ const Router = () => {
                         <CalculatorPage />
                     </PrivateRoute>
                 } />
-                <Route path="*" element={<MainPage />} />
+                {/* <Route path="*" element={<MainPage />} /> */}
             </Route>
         </Routes>
     )

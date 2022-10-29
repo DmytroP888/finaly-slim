@@ -1,11 +1,11 @@
 import { useLocation, Navigate } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+
+import { GoogleAds } from '../store/userSlice'
 
 const PrivateRoute = ({ children }) => {
+    const google = GoogleAds('google')
     const location = useLocation()
-    const { userInfo } = useSelector((state) => state.user)
-
-    if (!userInfo) {
+    if (!google) {
         return <Navigate to="/login" state={{ from: location }} />
     }
 

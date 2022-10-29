@@ -1,8 +1,9 @@
 import React from "react"
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { logoutUser } from '../../store'
+import { GoogleAds } from '../../store/userSlice'
 import {
     MainBlockFooter,
     SummaryBlockFooter,
@@ -31,12 +32,29 @@ import {
 const Footer = () => {
     const location = useLocation()
     const dispatch = useDispatch()
-    const { userInfo } = useSelector((state) => state.user)
-    const username = userInfo && userInfo.user.username
-    const token = userInfo && userInfo.refreshToken
+    const navigate = useNavigate()
+    // const { userInfo } = useSelector((state) => state.user)
+    // const username = userInfo && userInfo.user.username
+
+    const userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
+    const userName = userInfo && userInfo.username
+    console.log("~ userName Footer", userName)
+
+    const google = GoogleAds('google')
+    // const token = userInfo && userInfo.refreshToken
+    console.log("~ token 4 Footer", google)
 
     const logout = () => {
-        dispatch(logoutUser(token))
+        dispatch(logoutUser(google))
+
+        sessionStorage.clear()
+        document.cookie.split(";").forEach((c) => {
+            document.cookie = c
+                .replace(/^ +/, "")
+                .replace(/=.*/, "=;max-age=" + 0 + ";path=/")
+        })
+        navigate('/')
+
     }
 
     return userInfo &&
@@ -48,7 +66,7 @@ const Footer = () => {
                 <MainBlockFooter>
                     <NavBlockUserFooter >
                         <NameMenuUser>
-                            {username}
+                            {userName}
                         </NameMenuUser>
                         <ExitUserMenu onClick={logout} >
                             Exit

@@ -2,10 +2,10 @@ import { createSlice } from '@reduxjs/toolkit'
 
 import { getUserDetails, registerUser, userLogin, logoutUser } from './userAction'
 
-// initialize userToken from local storage
-const userToken = localStorage.getItem('userToken')
-    ? localStorage.getItem('userToken')
-    : null
+// -------------------------------------------------------
+const userToken = GoogleAds('google')
+// =========================================================
+
 
 const initialState = {
     loading: false,
@@ -13,12 +13,17 @@ const initialState = {
     userToken,
     error: null,
     success: false,
+    cookieAgree: null
 }
 
 const userSlice = createSlice({
     name: 'user',
     initialState,
-    reducers: {},
+    reducers: {
+        selectPolicyCookie: (state) => {
+            state.cookieAgree = true
+        }
+    },
     extraReducers: {
         // login user
         [userLogin.pending]: (state) => {
@@ -66,14 +71,16 @@ const userSlice = createSlice({
             state.loading = false
             state.userInfo = null
         },
-        [logoutUser.rejected]: (state) => {
+        [logoutUser.rejected]: (state, { payload }) => {
             state.loading = false
             state.userInfo = null
-
             state.userToken = null
             state.error = null
+            state.user = null
         },
     },
 })
+
+export const { selectPolicyCookie } = userSlice.actions
 
 export default userSlice.reducer

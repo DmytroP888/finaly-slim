@@ -22,6 +22,9 @@ const linkActiveColor = ({ isActive }) => { return { color: isActive ? GRAY_DARK
 
 const HeaderAuth = () => {
     const location = useLocation()
+
+    const userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
+
     const navMenu = (
         <NavBlock>
             <LinkMenu>
@@ -39,23 +42,25 @@ const HeaderAuth = () => {
 
     return (
         <>
-            <Header>
-                <NavLink to="/" >
-                    <DesktopWidth>
-                        <Logo src={LogoSVG} alt="Logo header" />
-                    </DesktopWidth>
-                    <TabletWidth>
-                        <LogoTablet src={LogoTabletSVG} alt="Logo header" />
-                    </TabletWidth>
-                    <MobileWidth>
-                        <LogoMobile src={LogoMobileSVG} alt="Logo header" />
-                    </MobileWidth>
-                </NavLink>
-                {(location.pathname !== '/auth') && (location.pathname !== '/login') ?
-                    <div>{navMenu}</div> :
-                    <Hideondesktop>{navMenu}</Hideondesktop>
-                }
-            </Header>
+            {!userInfo &&
+                <Header>
+                    <NavLink to="/" >
+                        <DesktopWidth>
+                            <Logo src={LogoSVG} alt="Logo header" />
+                        </DesktopWidth>
+                        <TabletWidth>
+                            <LogoTablet src={LogoTabletSVG} alt="Logo header" />
+                        </TabletWidth>
+                        <MobileWidth>
+                            <LogoMobile src={LogoMobileSVG} alt="Logo header" />
+                        </MobileWidth>
+                    </NavLink>
+                    {(location.pathname !== '/auth') && (location.pathname !== '/login') ?
+                        <div>{navMenu}</div> :
+                        <Hideondesktop>{navMenu}</Hideondesktop>
+                    }
+                </Header>
+            }
         </>
     )
 }
