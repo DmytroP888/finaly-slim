@@ -1,8 +1,9 @@
-import React, { useState } from "react"
+import React, { useState, useContext } from "react"
 import { useDispatch, useSelector } from 'react-redux'
 
 import PolicyCookie from './PolicyCookie'
 import { selectPolicyCookie } from '../store/userSlice'
+// import { ProviderStoreReact } from './ProviderStoreReact'
 import {
     BlurredBackground,
     BlockModal,
@@ -12,7 +13,6 @@ import {
 } from './SourceStore.styled'
 
 const SourceStore = () => {
-
     const dispatch = useDispatch()
     const [condition, setCondition] = useState(false)
     const closeCondition = () => { setCondition(!condition) }
@@ -22,22 +22,53 @@ const SourceStore = () => {
     }
 
     // ----------------------------------------------------------
-    const { loading, userInfo, cookieAgree, error } = useSelector((state) => state.user)
+    // const { loading, userInfo, cookieAgree, error } = useSelector((state) => state.user)
 
     // initialize userToken and cookie from cookie
-    const GoogleAds = (name) => {
-        const t = document.cookie.match("\\b" + name + "=([^;]*)\\b")
-        return t ? t[1] : null
-    }
-    const userToken = GoogleAds('google')
-    const cookieAg = GoogleAds('agree')
+    // const cookieParse = (name) => {
+    //     const t = document.cookie.match("\\b" + name + "=([^;]*)\\b")
+    //     return t ? t[1] : null
+    // }
+
+    // const sourceTrue = {
+    //     userInfoGlobal: null,
+    //     todaySummary: null,
+    //     googleAds: null,
+    //     cookieAg: null
+    // }
+
+
     // ----------------------------------------------------------
-
-
-
-    // ----------------------------------------------------------
-
-
+    // if (cookieAgree) {
+    //     setUser({
+    //         userInfoGlobal: JSON.parse(sessionStorage.getItem('userInfo')),
+    //         todaySummary: JSON.parse(sessionStorage.getItem('todaySummary')),
+    //         googleAds: cookieParse('google'),
+    //         cookieAg: cookieParse('agree')
+    //     })
+    // }
+    // else if (userInfo) {
+    //     setUser({
+    //         userInfoGlobal: userInfo,
+    //         todaySummary: userInfo.todaySummary,
+    //         googleAds: userInfo.accessToken
+    //     })
+    // }
+    // if (cookieAgree) {
+    //     setSsource({
+    //         userInfoGlobal: JSON.parse(sessionStorage.getItem('userInfo')),
+    //         todaySummary: JSON.parse(sessionStorage.getItem('todaySummary')),
+    //         googleAds: cookieParse('google'),
+    //         cookieAg: cookieParse('agree')
+    //     })
+    // }
+    // else if (userInfo) {
+    //     setSsource({
+    //         userInfoGlobal: userInfo,
+    //         todaySummary: userInfo.todaySummary,
+    //         googleAds: userInfo.accessToken
+    //     })
+    // }
 
     // ----------------------------------------------------------
 

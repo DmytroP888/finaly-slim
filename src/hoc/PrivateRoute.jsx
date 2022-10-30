@@ -1,14 +1,14 @@
+import { useContext } from "react"
 import { useLocation, Navigate } from 'react-router-dom'
 
-import { GoogleAds } from '../store/userSlice'
+import { ProviderStoreReact } from '../storeLocationRules/ProviderStoreReact'
 
 const PrivateRoute = ({ children }) => {
-    const google = GoogleAds('google')
     const location = useLocation()
-    if (!google) {
+    const { googleAds } = useContext(ProviderStoreReact)
+    if (!googleAds) {
         return <Navigate to="/login" state={{ from: location }} />
     }
-
     return children
 }
 

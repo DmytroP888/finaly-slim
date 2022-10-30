@@ -1,9 +1,9 @@
-import React from "react"
+import React, { useContext } from "react"
 import { useLocation, useNavigate } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
 import { logoutUser } from '../../store'
-import { GoogleAds } from '../../store/userSlice'
+import { ProviderStoreReact } from '../../storeLocationRules/ProviderStoreReact'
 import {
     MainBlockFooter,
     SummaryBlockFooter,
@@ -33,20 +33,10 @@ const Footer = () => {
     const location = useLocation()
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    // const { userInfo } = useSelector((state) => state.user)
-    // const username = userInfo && userInfo.user.username
-
-    const userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
-    const userName = userInfo && userInfo.username
-    console.log("~ userName Footer", userName)
-
-    const google = GoogleAds('google')
-    // const token = userInfo && userInfo.refreshToken
-    console.log("~ token 4 Footer", google)
-
+    const { userInfoGlobal, googleAds } = useContext(ProviderStoreReact)
+    const userName = userInfoGlobal && userInfoGlobal.username
     const logout = () => {
-        dispatch(logoutUser(google))
-
+        dispatch(logoutUser(googleAds))
         sessionStorage.clear()
         document.cookie.split(";").forEach((c) => {
             document.cookie = c
@@ -54,10 +44,9 @@ const Footer = () => {
                 .replace(/=.*/, "=;max-age=" + 0 + ";path=/")
         })
         navigate('/')
-
     }
 
-    return userInfo &&
+    return googleAds &&
         !(location.pathname === '/login') &&
         !(location.pathname === '/auth') &&
         !(location.pathname === '/') &&

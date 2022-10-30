@@ -1,6 +1,7 @@
-import React from "react"
+import React, { useContext } from "react"
 import { NavLink, useLocation } from 'react-router-dom'
 
+import { ProviderStoreReact } from '../../storeLocationRules/ProviderStoreReact'
 import { GRAY_BLUE, GRAY_DARK } from '../../assets/themes/colors'
 import {
     DesktopWidth,
@@ -22,9 +23,7 @@ const linkActiveColor = ({ isActive }) => { return { color: isActive ? GRAY_DARK
 
 const HeaderAuth = () => {
     const location = useLocation()
-
-    const userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
-
+    const { googleAds } = useContext(ProviderStoreReact)
     const navMenu = (
         <NavBlock>
             <LinkMenu>
@@ -42,7 +41,7 @@ const HeaderAuth = () => {
 
     return (
         <>
-            {!userInfo &&
+            {!googleAds &&
                 <Header>
                     <NavLink to="/" >
                         <DesktopWidth>

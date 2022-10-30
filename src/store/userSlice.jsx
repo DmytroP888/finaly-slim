@@ -1,16 +1,19 @@
+// import { useContext } from "react"
 import { createSlice } from '@reduxjs/toolkit'
 
 import { getUserDetails, registerUser, userLogin, logoutUser } from './userAction'
+// import { ProviderStoreReact } from '../storeLocationRules/ProviderStoreReact'
 
 // -------------------------------------------------------
-const userToken = GoogleAds('google')
+// function start() {
+//     const userToken = useContext(ProviderStoreReact)
+// }
 // =========================================================
-
 
 const initialState = {
     loading: false,
     userInfo: null,
-    userToken,
+    userToken: null,
     error: null,
     success: false,
     cookieAgree: null
@@ -77,6 +80,7 @@ const userSlice = createSlice({
             state.userToken = null
             state.error = null
             state.user = null
+            state.cookieAgree = null
         },
     },
 })
