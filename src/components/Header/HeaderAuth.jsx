@@ -1,7 +1,7 @@
-import React, { useContext } from "react"
+import React from "react"
 import { NavLink, useLocation } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 
-import { ProviderStoreReact } from '../../storeLocationRules/ProviderStoreReact'
 import { GRAY_BLUE, GRAY_DARK } from '../../assets/themes/colors'
 import {
     DesktopWidth,
@@ -23,7 +23,28 @@ const linkActiveColor = ({ isActive }) => { return { color: isActive ? GRAY_DARK
 
 const HeaderAuth = () => {
     const location = useLocation()
-    const { googleAds } = useContext(ProviderStoreReact)
+    const { userInfo, userToken } = useSelector((state) => state.user)
+    const tokenACC = userInfo && userInfo.accessToken
+
+    // let testACCstoreTOKENlet_1 = userInfo.accessToken
+    // console.log("^^^testACCstoreTOKENlet_1", testACCstoreTOKENlet_1)
+    // let testACCstoreTOKENconst_1 = userInfo.accessToken
+    // console.log("^^^testACCstoreTOKENconst_1", testACCstoreTOKENconst_1)
+
+    // let testACCstoreTOKENlet_2 = userInfo && userInfo.accessToken
+    // console.log("^^^testACCstoreTOKENlet_2", testACCstoreTOKENlet_2)
+    // let testACCstoreTOKENconst_2 = userInfo && userInfo.accessToken
+    // console.log("^^^testACCstoreTOKENconst_2", testACCstoreTOKENconst_2)
+
+    // if (tokenACC) {
+    //     console.log("HeaderAuth--ACC--tokenACCstore", tokenACC)
+    // }
+    // else {
+    //     console.log("HeaderAuth--==--TokenREFcookie", userToken)
+    // }
+    !tokenACC && console.log("HeaderAuth--==--TokenREFcookie", userToken)
+
+
     const navMenu = (
         <NavBlock>
             <LinkMenu>
@@ -41,7 +62,7 @@ const HeaderAuth = () => {
 
     return (
         <>
-            {!googleAds &&
+            {!tokenACC &&
                 <Header>
                     <NavLink to="/" >
                         <DesktopWidth>

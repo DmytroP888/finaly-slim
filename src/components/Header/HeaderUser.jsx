@@ -1,10 +1,9 @@
-import React, { useState, useContext } from "react"
+import React, { useState, useEffect } from "react"
 import { NavLink, useLocation, useNavigate } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
-import { logoutUser } from '../../store'
+import { logoutUser, authRefresh } from '../../store'
 import { WHITE, GRAY_BLUE, GRAY_DARK } from '../../assets/themes/colors'
-import { ProviderStoreReact } from '../../storeLocationRules/ProviderStoreReact'
 import {
     DesktopWidth,
     TabletWidtUser,
@@ -37,14 +36,43 @@ const linkActiveColorTabletMobile = ({ isActive }) => { return { color: isActive
 const HeaderUser = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    const { userInfoGlobal, googleAds } = useContext(ProviderStoreReact)
+    const location = useLocation()
+    const [menuOpened, setMenuOpened] = useState(false)
+    const toggleMenu = () => { setMenuOpened(!menuOpened) }
+    const closeMenuWindow = () => { setMenuOpened(false) }
+    // --------------------------------------------
+    const { userInfo } = useSelector((state) => state.user)
 
-    console.log("googleAds", googleAds)
-    console.log("userInfoGlobal", userInfoGlobal)
+    let tokenACC = userInfo && userInfo.accessToken
+    let userToken = userInfo && userInfo.refreshToken
+    let sid = userInfo && userInfo.sid
+    console.log("userToken", userToken)
+    console.log("sid", sid)
 
-    const userName = userInfoGlobal && userInfoGlobal.username
+    const tokenACC_exp = tokenACC && ((JSON.parse(atob(tokenACC.split(".")[1]))).exp) * 1000
+    const minutExpire = 59 // 5 minutes before token expiration
+    const tokenACC_exp_Reboot = tokenACC && (tokenACC_exp - (minutExpire * 60 * 1000))   // determine the time 5 minutes before the end of the life of the Access Token
+
+    tokenACC && console.log("HeaderUser--==--tokenACCstore", tokenACC, '/exp-', tokenACC_exp)
+    console.log("tokenACC_exp_Fuse - 5 minutes", tokenACC_exp_Reboot);
+
+    useEffect(() => {
+        if (tokenACC && (tokenACC_exp_Reboot < Date.now())) {
+            console.log('^^^^^^^^^^^----- Спрацювала перевірка токена')
+
+            dispatch(authRefresh({ userToken, sid }))
+        }
+
+        // Треба ще одну умову if якщо аксес токен експайрнувся по своєму часу то діспатч логаут, це означає, що запит неавторизований 401
+
+    }, [navigate])
+
+    console.log(new Date(tokenACC_exp))
+    // --------------------------------------------
+
+    const userName = userInfo && userInfo.user.username
     const logout = () => {
-        dispatch(logoutUser({ googleAds }))
+        dispatch(logoutUser({ tokenACC }))
         sessionStorage.clear()
         document.cookie.split(";").forEach((c) => {
             document.cookie = c
@@ -53,14 +81,10 @@ const HeaderUser = () => {
         })
         navigate('/')
     }
-    const location = useLocation()
-    const [menuOpened, setMenuOpened] = useState(false)
-    const toggleMenu = () => { setMenuOpened(!menuOpened) }
-    const closeMenuWindow = () => { setMenuOpened(false) }
 
     return (
         <>
-            {googleAds &&
+            {tokenACC &&
                 <>
                     <Header>
                         <NavLink to="/calculator">

@@ -1,19 +1,22 @@
-// import { useContext } from "react"
 import { createSlice } from '@reduxjs/toolkit'
 
-import { getUserDetails, registerUser, userLogin, logoutUser } from './userAction'
-// import { ProviderStoreReact } from '../storeLocationRules/ProviderStoreReact'
+import { authRefresh, registerUser, userLogin, logoutUser } from './userAction'
 
-// -------------------------------------------------------
-// function start() {
-//     const userToken = useContext(ProviderStoreReact)
-// }
-// =========================================================
+// initialize refreshToken from Cookie
+const cookieParse = (name) => {
+    const c = document.cookie.match("\\b" + name + "=([^;]*)\\b")
+    return c ? c[1] : null
+}
+const userToken = cookieParse('google')
+    ? cookieParse('google')
+    : null
+
+console.log("userSlice--userToken", userToken)
 
 const initialState = {
     loading: false,
     userInfo: null,
-    userToken: null,
+    userToken,
     error: null,
     success: false,
     cookieAgree: null
@@ -55,26 +58,29 @@ const userSlice = createSlice({
             state.loading = false
             state.error = payload
         },
-        // get user details
-        [getUserDetails.pending]: (state) => {
+        // get user auth
+        [authRefresh.pending]: (state) => {
             state.loading = true
         },
-        [getUserDetails.fulfilled]: (state, { payload }) => {
+        [authRefresh.fulfilled]: (state, { payload }) => {
             state.loading = false
-            state.userInfo = payload
+            state.userInfo.accessToken = payload.newAccessToken
+            state.userInfo.refreshToken = payload.newRefreshToken
+            state.userInfo.sid = payload.sid
         },
-        [getUserDetails.rejected]: (state, { payload }) => {
+        [authRefresh.rejected]: (state, { payload }) => {
             state.loading = false
+            state.error = payload
         },
         // user logout
         [logoutUser.pending]: (state) => {
             state.loading = true
         },
-        [logoutUser.fulfilled]: (state, { payload }) => {
+        [logoutUser.fulfilled]: (state) => {
             state.loading = false
             state.userInfo = null
         },
-        [logoutUser.rejected]: (state, { payload }) => {
+        [logoutUser.rejected]: (state) => {
             state.loading = false
             state.userInfo = null
             state.userToken = null

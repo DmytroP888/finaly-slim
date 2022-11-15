@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react"
+import React, { useEffect, useState } from "react"
 import { NavLink, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { useForm } from "react-hook-form"
@@ -7,7 +7,6 @@ import SourceStore from '../../storeLocationRules'
 import { userLogin } from '../../store'
 import Spinner from '../Spinner'
 import Error from "../AuthForm/Error"
-import { ProviderStoreReact } from '../../storeLocationRules/ProviderStoreReact'
 
 import {
     WrapperLoginform,
@@ -26,12 +25,11 @@ const LoginForm = () => {
     const navigate = useNavigate()
     const { register, handleSubmit } = useForm()
     const [customError, setCustomError] = useState(null)
-    const { loading, cookieAgree, error } = useSelector((state) => state.user)
-
-    const { googleAds } = useContext(ProviderStoreReact)
+    const { loading, cookieAgree, error, userInfo } = useSelector((state) => state.user)
+    const tokenACC = userInfo && userInfo.accessToken
     useEffect(() => {
-        if (googleAds) navigate('/calculator')
-    }, [navigate, googleAds])
+        if (tokenACC) navigate('/calculator')
+    }, [navigate, tokenACC])
     const submitForm = (data) => {
         if (data.password <= 7) {
             setCustomError('"password" length must be at least 8 characters long')
@@ -41,7 +39,7 @@ const LoginForm = () => {
         dispatch(userLogin(data))
     }
 
-    return !googleAds && (
+    return !tokenACC && (
         <>
             {loading ? <Spinner /> :
                 <>

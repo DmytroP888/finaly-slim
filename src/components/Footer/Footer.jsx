@@ -1,9 +1,8 @@
-import React, { useContext } from "react"
+import React from "react"
 import { useLocation, useNavigate } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { logoutUser } from '../../store'
-import { ProviderStoreReact } from '../../storeLocationRules/ProviderStoreReact'
 import {
     MainBlockFooter,
     SummaryBlockFooter,
@@ -33,10 +32,11 @@ const Footer = () => {
     const location = useLocation()
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    const { userInfoGlobal, googleAds } = useContext(ProviderStoreReact)
-    const userName = userInfoGlobal && userInfoGlobal.username
+    const { userInfo } = useSelector((state) => state.user)
+    const userName = userInfo && userInfo.user.username
+    const tokenACC = userInfo && userInfo.accessToken
     const logout = () => {
-        dispatch(logoutUser(googleAds))
+        dispatch(logoutUser(tokenACC))
         sessionStorage.clear()
         document.cookie.split(";").forEach((c) => {
             document.cookie = c
@@ -46,7 +46,7 @@ const Footer = () => {
         navigate('/')
     }
 
-    return googleAds &&
+    return tokenACC &&
         !(location.pathname === '/login') &&
         !(location.pathname === '/auth') &&
         !(location.pathname === '/') &&

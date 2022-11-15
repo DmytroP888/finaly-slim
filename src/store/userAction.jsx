@@ -16,9 +16,10 @@ export const userLogin = createAsyncThunk(
             // store user's in session storage
             const cookieState = store.getState().user.cookieAgree
             if (cookieState) {
-                sessionStorage.setItem('todaySummary', JSON.stringify(data.todaySummary))
-                sessionStorage.setItem('userInfo', JSON.stringify(data.user))
-                document.cookie = `google=${data.accessToken}`
+                // sessionStorage.setItem('todaySummary', JSON.stringify(data.todaySummary))
+                // sessionStorage.setItem('userInfo', JSON.stringify(data.user))
+                document.cookie = `sd=${data.sid}`
+                document.cookie = `google=${data.refreshToken}`
                 document.cookie = `agree=${cookieState}`
             }
             return data
@@ -51,15 +52,15 @@ export const registerUser = createAsyncThunk(
     }
 )
 
-export const getUserDetails = createAsyncThunk(
-    'user/getUserDetails',
-    async (arg, { getState, rejectWithValue }) => {
-        try {// get user data from store
-            const { user } = getState()
+export const authRefresh = createAsyncThunk(
+    'user/authRefresh',
+    async ({ userToken, sid }, { rejectWithValue }) => {
+        try {
             // configure authorization header with user's token
-            const config = { headers: { Authorization: `Bearer ${user.refreshToken} ` } }
+            const config = { headers: { Authorization: `Bearer ${userToken} ` } }
             const { data } =
-                await axios.get(`https://slimmom-backend.goit.global//auth/refresh`, config)
+                await axios.post(`https://slimmom-backend.goit.global/auth/refresh`, { sid }, config)
+            document.cookie = `google=${data.newRefreshToken}`
             return data
         } catch (error) {
             if (error.response && error.response.data.message) {
@@ -73,10 +74,10 @@ export const getUserDetails = createAsyncThunk(
 
 export const logoutUser = createAsyncThunk(
     'user/logout',
-    async ({ google }, { rejectWithValue }) => {
+    async ({ tokenACC }, { rejectWithValue }) => {
         try {
             const config = { headers: { 'Content-Type': 'application/json' } }
-            await axios.post(`https://slimmom-backend.goit.global/auth/logout`, { google }, config)
+            await axios.post(`https://slimmom-backend.goit.global/auth/logout`, { tokenACC }, config)
             return {}
         } catch (error) {
             if (error.response && error.response.data.message) {
