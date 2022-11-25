@@ -4,7 +4,7 @@ import userReducer from './userSlice'
 import {
     userLogin,
     registerUser,
-    getUserDetails,
+    authRefresh,
     logoutUser
 } from './userAction'
 
@@ -20,6 +20,6 @@ export {
     userReducer,
     userLogin,
     registerUser,
-    getUserDetails,
+    authRefresh,
     logoutUser
 }

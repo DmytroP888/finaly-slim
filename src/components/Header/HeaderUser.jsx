@@ -1,10 +1,10 @@
-import React, { useState, useContext } from "react"
+import React, { useState } from "react"
 import { NavLink, useLocation, useNavigate } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { logoutUser } from '../../store'
+import NewRefreshTokens from '../../authRefresh'
 import { WHITE, GRAY_BLUE, GRAY_DARK } from '../../assets/themes/colors'
-import { ProviderStoreReact } from '../../storeLocationRules/ProviderStoreReact'
 import {
     DesktopWidth,
     TabletWidtUser,
@@ -37,14 +37,15 @@ const linkActiveColorTabletMobile = ({ isActive }) => { return { color: isActive
 const HeaderUser = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    const { userInfoGlobal, googleAds } = useContext(ProviderStoreReact)
-
-    console.log("googleAds", googleAds)
-    console.log("userInfoGlobal", userInfoGlobal)
-
-    const userName = userInfoGlobal && userInfoGlobal.username
+    const location = useLocation()
+    const [menuOpened, setMenuOpened] = useState(false)
+    const toggleMenu = () => { setMenuOpened(!menuOpened) }
+    const closeMenuWindow = () => { setMenuOpened(false) }
+    const { userInfo, genuineToken } = useSelector((state) => state.user)
+    const userName = userInfo && userInfo.user.username
     const logout = () => {
-        dispatch(logoutUser({ googleAds }))
+        dispatch(logoutUser({}))
+        localStorage.clear()
         sessionStorage.clear()
         document.cookie.split(";").forEach((c) => {
             document.cookie = c
@@ -53,15 +54,12 @@ const HeaderUser = () => {
         })
         navigate('/')
     }
-    const location = useLocation()
-    const [menuOpened, setMenuOpened] = useState(false)
-    const toggleMenu = () => { setMenuOpened(!menuOpened) }
-    const closeMenuWindow = () => { setMenuOpened(false) }
 
     return (
         <>
-            {googleAds &&
+            {genuineToken &&
                 <>
+                    <NewRefreshTokens />
                     <Header>
                         <NavLink to="/calculator">
                             <DesktopWidth>

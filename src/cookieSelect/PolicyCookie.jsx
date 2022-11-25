@@ -7,7 +7,7 @@ import {
     TextPolicy,
     LawsPolicy,
     LawsPolicyList
-} from './SourceStore.styled'
+} from './Cookie.styled'
 
 const PolicyCookie = () => {
     const [policyOpened, setPolicyOpened] = useState(false)

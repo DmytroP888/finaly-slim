@@ -4,10 +4,6 @@ import { useSelector } from "react-redux"
 
 import Modal from '../Modal'
 import Spinner from '../Spinner'
-// import { googleAds } from '../../storeLocationRules/SourceStore'
-
-import { useContext } from "react"
-import { ProviderStoreReact } from '../../storeLocationRules/ProviderStoreReact'
 
 import {
     WrapperCalcform,
@@ -28,11 +24,11 @@ import {
 } from './Calculateform.styled'
 
 const Calculateform = () => {
-    const { loading } = useSelector((state) => state.user)
+    const { loading, userInfo } = useSelector((state) => state.user)
+    const tokenACC = userInfo && userInfo.accessToken
     const [openModal, setOpenModal] = useState(false)
     const openedModal = () => { setOpenModal(!openModal) }
 
-    const { googleAds } = useContext(ProviderStoreReact)
 
     return (
         <>
@@ -85,7 +81,7 @@ const Calculateform = () => {
                                     </RadioChecked>
                                 </BlockRadio>
                             </RightBlockInputs>
-                            {googleAds ?
+                            {tokenACC ?
                                 <ButtonCalcform type="submit" onClick={openedModal} >Start losing weight</ButtonCalcform>
                                 :
                                 <NavLink to="/login">
