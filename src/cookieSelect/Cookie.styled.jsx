@@ -10,7 +10,7 @@ import {
     GRAY_BLUE,
     BLUE_LIGHT,
     BLUE_HOVER
-} from "../../src/assets/themes/colors"
+} from "../assets/themes/colors"
 
 export const centerAlignment = css` 
     left: 0;

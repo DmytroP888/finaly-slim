@@ -18,7 +18,6 @@ export const userLogin = createAsyncThunk(
             if (cookieState) {
                 // sessionStorage.setItem('todaySummary', JSON.stringify(data.todaySummary))
                 // sessionStorage.setItem('userInfo', JSON.stringify(data.user))
-                document.cookie = `sd=${data.sid}`
                 document.cookie = `google=${data.refreshToken}`
                 document.cookie = `agree=${cookieState}`
             }
@@ -54,12 +53,12 @@ export const registerUser = createAsyncThunk(
 
 export const authRefresh = createAsyncThunk(
     'user/authRefresh',
-    async ({ userToken, sid }, { rejectWithValue }) => {
+    async ({ tokenRefSTOREofCookie, sidRefresh }, { rejectWithValue }) => {
         try {
             // configure authorization header with user's token
-            const config = { headers: { Authorization: `Bearer ${userToken} ` } }
+            const config = { headers: { Authorization: `Bearer ${tokenRefSTOREofCookie} ` } }
             const { data } =
-                await axios.post(`https://slimmom-backend.goit.global/auth/refresh`, { sid }, config)
+                await axios.post(`https://slimmom-backend.goit.global/auth/refresh`, { "sid": sidRefresh }, config)
             document.cookie = `google=${data.newRefreshToken}`
             return data
         } catch (error) {
@@ -74,11 +73,10 @@ export const authRefresh = createAsyncThunk(
 
 export const logoutUser = createAsyncThunk(
     'user/logout',
-    async ({ tokenACC }, { rejectWithValue }) => {
+    async ({ }, { rejectWithValue }) => {
         try {
             const config = { headers: { 'Content-Type': 'application/json' } }
-            await axios.post(`https://slimmom-backend.goit.global/auth/logout`, { tokenACC }, config)
-            return {}
+            await axios.post(`https://slimmom-backend.goit.global/auth/logout`, {}, config)
         } catch (error) {
             if (error.response && error.response.data.message) {
                 return rejectWithValue(error.response.data.message)

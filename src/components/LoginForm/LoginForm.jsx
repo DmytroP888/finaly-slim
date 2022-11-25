@@ -3,7 +3,7 @@ import { NavLink, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { useForm } from "react-hook-form"
 
-import SourceStore from '../../storeLocationRules'
+import CookieSource from '../../cookieSelect'
 import { userLogin } from '../../store'
 import Spinner from '../Spinner'
 import Error from "../AuthForm/Error"
@@ -43,7 +43,7 @@ const LoginForm = () => {
         <>
             {loading ? <Spinner /> :
                 <>
-                    {!cookieAgree && <SourceStore />}
+                    {!cookieAgree && <CookieSource />}
                     <WrapperLoginform>
                         <TitleLoginform>
                             Sign in

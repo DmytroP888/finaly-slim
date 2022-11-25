@@ -7,7 +7,7 @@ const cookieParse = (name) => {
     const c = document.cookie.match("\\b" + name + "=([^;]*)\\b")
     return c ? c[1] : null
 }
-const userToken = cookieParse('google')
+export const userToken = cookieParse('google')
     ? cookieParse('google')
     : null
 
@@ -15,8 +15,10 @@ console.log("userSlice--userToken", userToken)
 
 const initialState = {
     loading: false,
+    loadingLogout: false,
     userInfo: null,
     userToken,
+    genuineToken: null,
     error: null,
     success: false,
     cookieAgree: null
@@ -40,6 +42,7 @@ const userSlice = createSlice({
             state.loading = false
             state.userInfo = payload
             state.userToken = payload.userToken
+            state.genuineToken = true
         },
         [userLogin.rejected]: (state, { payload }) => {
             state.loading = false
@@ -74,21 +77,22 @@ const userSlice = createSlice({
         },
         // user logout
         [logoutUser.pending]: (state) => {
-            state.loading = true
+            state.loadingLogout = true
         },
         [logoutUser.fulfilled]: (state) => {
-            state.loading = false
+            state.loadingLogout = false
             state.userInfo = null
         },
         [logoutUser.rejected]: (state) => {
-            state.loading = false
+            state.loadingLogout = false
             state.userInfo = null
             state.userToken = null
             state.error = null
             state.user = null
             state.cookieAgree = null
-        },
-    },
+            state.genuineToken = null
+        }
+    }
 })
 
 export const { selectPolicyCookie } = userSlice.actions
